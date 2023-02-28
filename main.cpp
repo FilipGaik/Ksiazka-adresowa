@@ -6,8 +6,13 @@
 using namespace std;
 
 struct Addressee{
-    int id;
+    int id, idOfLoggedUser;
     string name, surname, phoneNumber, email, address;
+};
+
+struct User{
+    int id;
+    string login, password;
 };
 
 string readLine(){
@@ -41,12 +46,16 @@ string getSubstringAndIncreaseCounter(string line, int& counter){
     return substring;
 }
 
-void loadAddressBookToAddressees(vector<Addressee>& addressees, int& counter){
+int loadAddressBookToAddressees(vector<Addressee>& addressees, int idOfLoggedUser){
+    int counter = 0;
+    int theBiggestId = 0;
     fstream addressBook;
-    addressBook.open( "Ksiazka adresowa.txt", ios::in);
+    addressBook.open( "KsiazkaAdresowa.txt", ios::in);
+
+    addressees.clear();
 
     if (!addressBook.good()){
-        return;
+        return 0;
     }
     else{
         Addressee myFriend;
@@ -55,46 +64,26 @@ void loadAddressBookToAddressees(vector<Addressee>& addressees, int& counter){
 
         while (getline(addressBook, line)){
             myFriend.id = stoi(getSubstringAndIncreaseCounter(line, counter));
+            myFriend.idOfLoggedUser = stoi(getSubstringAndIncreaseCounter(line, counter));
             myFriend.name = getSubstringAndIncreaseCounter(line, counter);
             myFriend.surname = getSubstringAndIncreaseCounter(line, counter);
             myFriend.phoneNumber = getSubstringAndIncreaseCounter(line, counter);
             myFriend.email = getSubstringAndIncreaseCounter(line, counter);
             myFriend.address = getSubstringAndIncreaseCounter(line, counter);
 
-            addressees.push_back(myFriend);
+            theBiggestId = myFriend.id;
+
+            if (myFriend.idOfLoggedUser == idOfLoggedUser){
+                    addressees.push_back(myFriend);
+            }
             counter = 0;
             cin.sync();
         }
+        return theBiggestId;
     }
 }
 
-void displayMenu(){
-    fstream addressBook;
-    addressBook.open( "Ksiazka adresowa.txt", ios::in);
-
-    if (!addressBook.good()){
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
-        cout << "Ksiazka adresowa jest pusta, wprowadz dane!" << endl << endl;
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-    }
-
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
-    cout << "KSIAZKA ADRESOWA" << endl;
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-
-    cout << "1. Dodaj adresata." << endl;
-    cout << "2. Wyszukaj adresata po imieniu." << endl;
-    cout << "3. Wyszukaj adresata po nazwisku." << endl;
-    cout << "4. Wyswietl wszystkich adresatow." << endl;
-    cout << "5. Usun adresata." << endl;
-    cout << "6. Edytuj adresata." << endl;
-    cout << "7. Zakoncz program." << endl;
-
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10);
-    cout << "Wybierz opcje (1-7): ";
-}
-
-void addFriend(vector<Addressee>& addressees){
+int addFriend(vector<Addressee>& addressees, int idOfLoggedUser, int theBiggestId){
     Addressee newFriend;
 
     cout << "Podaj imie: ";
@@ -112,24 +101,27 @@ void addFriend(vector<Addressee>& addressees){
     cout << "Podaj adres: ";
     newFriend.address = readLine();
 
-    newFriend.id = (addressees.size() == 0) ? 1 : addressees.back().id + 1;
+    newFriend.id = (theBiggestId == 0) ? 1 : theBiggestId + 1;
+    newFriend.idOfLoggedUser = idOfLoggedUser;
 
     addressees.push_back(newFriend);
 
     fstream addressBook;
-    addressBook.open("Ksiazka adresowa.txt", ios::out | ios::app);
+    addressBook.open("KsiazkaAdresowa.txt", ios::out | ios::app);
 
-    addressBook << addressees[addressees.size() - 1].id << "|" << addressees[addressees.size() - 1].name << "|"
-    << addressees[addressees.size() - 1].surname << "|" << addressees[addressees.size() - 1].phoneNumber << "|"
-    << addressees[addressees.size() - 1].email << "|" << addressees[addressees.size() - 1].address << "|" << endl;
+    addressBook << addressees[addressees.size() - 1].id << "|" << addressees[addressees.size() - 1].idOfLoggedUser << "|"
+    << addressees[addressees.size() - 1].name << "|" << addressees[addressees.size() - 1].surname << "|"
+    << addressees[addressees.size() - 1].phoneNumber << "|" << addressees[addressees.size() - 1].email << "|"
+    << addressees[addressees.size() - 1].address << "|" << endl;
 
     cout << "Kontakt zostal dodany." << endl;
     Sleep(3000);
     system("cls");
+    return theBiggestId++;
 }
 
 void displayByName(vector<Addressee> addressees){
-    if ((int) addressees.size() == 0){
+    if (addressees.size() == 0){
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
         cout << "Plik pusty, najpierw dodaj dane!" << endl;
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
@@ -164,7 +156,7 @@ void displayByName(vector<Addressee> addressees){
 }
 
 void displayBySurname(vector<Addressee> addressees){
-    if ((int) addressees.size() == 0){
+    if (addressees.size() == 0){
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
         cout << "Plik pusty, najpierw dodaj dane!" << endl;
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
@@ -199,10 +191,7 @@ void displayBySurname(vector<Addressee> addressees){
 }
 
 void displayAddressBook(vector<Addressee> addressees){
-    fstream addressBook;
-    addressBook.open("Ksiazka adresowa.txt", ios::in);
-
-    if (!addressBook.good()){
+    if (addressees.size() == 0){
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
         cout << "Plik pusty, najpierw dodaj dane!" << endl;
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
@@ -222,15 +211,54 @@ void displayAddressBook(vector<Addressee> addressees){
     system("cls");
 }
 
-void exportAddressesToExternalFile(vector<Addressee> addressees){
+void exportAfterDeletion(int id){
+    int counter = 0;
+    string line;
+    int idToCompare;
     fstream addressBook;
-    addressBook.open("Ksiazka adresowa.txt", ios::out);
+    addressBook.open( "KsiazkaAdresowa.txt", ios::in);
+    fstream addressBookTemporary;
+    addressBookTemporary.open("KsiazkaAdresowa_temporary.txt", ios::out);
 
-    for (int i = 0; i < (int) addressees.size(); i++){
-        addressBook << addressees[i].id << "|" << addressees[i].name << "|"
-        << addressees[i].surname << "|" << addressees[i].phoneNumber << "|"
-        << addressees[i].email << "|" << addressees[i].address << "|" << endl;
+    while (getline(addressBook, line)){
+        idToCompare = stoi(getSubstringAndIncreaseCounter(line, counter));
+        if (idToCompare != id){
+            addressBookTemporary << line << endl;
+        }
+        counter = 0;
     }
+    addressBook.close();
+    addressBookTemporary.close();
+    system("del KsiazkaAdresowa.txt");
+    rename("KsiazkaAdresowa_temporary.txt", "KsiazkaAdresowa.txt");
+}
+
+void exportAfterEdition(vector<Addressee> addressees, int id, int counterInAddressees){
+    int counter = 0;
+    string line;
+    int idToCompare;
+    fstream addressBook;
+    addressBook.open( "KsiazkaAdresowa.txt", ios::in);
+    fstream addressBookTemporary;
+    addressBookTemporary.open("KsiazkaAdresowa_temporary.txt", ios::out);
+
+    while (getline(addressBook, line)){
+        idToCompare = stoi(getSubstringAndIncreaseCounter(line, counter));
+        if (idToCompare != id){
+            addressBookTemporary << line << endl;
+        }
+        else{
+            addressBookTemporary << addressees[counterInAddressees].id << "|" << addressees[counterInAddressees].idOfLoggedUser << "|"
+            << addressees[counterInAddressees].name << "|" << addressees[counterInAddressees].surname << "|"
+            << addressees[counterInAddressees].phoneNumber << "|" << addressees[counterInAddressees].email << "|"
+            << addressees[counterInAddressees].address << "|" << endl;
+        }
+        counter = 0;
+    }
+    addressBook.close();
+    addressBookTemporary.close();
+    system("del KsiazkaAdresowa.txt");
+    rename("KsiazkaAdresowa_temporary.txt", "KsiazkaAdresowa.txt");
 }
 
 void deleteAddressee(vector<Addressee>& addressees){
@@ -271,7 +299,7 @@ void deleteAddressee(vector<Addressee>& addressees){
             if (confirmation == 't'){
                 auto it = addressees.begin() + counterToDelete;
                 addressees.erase(it);
-                exportAddressesToExternalFile(addressees);
+                exportAfterDeletion(id);
                 cout << "Adresat zostal usuniety." << endl;
             }
             else{
@@ -368,27 +396,79 @@ void editAddressee(vector<Addressee>& addressees){
                 }while (!isNumber(choiceFromReadLine));
                 choice = stoi(choiceFromReadLine);
             }
-            exportAddressesToExternalFile(addressees);
+            exportAfterEdition(addressees, id, counterInAddressees);
             system("cls");
         }
     }
 }
 
-int main(){
-    vector <Addressee> addressees;
-    int choice;
-    int counter = 0;
+void exportRegisteredUsersToExternalFile(vector<User> users){
+    fstream registeredUsers;
+    registeredUsers.open("Registered users.txt", ios::out);
 
-    loadAddressBookToAddressees(addressees, counter);
+    for (int i = 0; i < (int) users.size(); i++){
+        registeredUsers << users[i].id << "|" << users[i].login << "|"
+        << users[i].password << "|" << endl;
+    }
+}
+
+void changePassword(vector<User>& users, int idOfLoggedUser){
+    string password;
+    cout << "Podaj nowe haslo: ";
+    cin >> password;
+
+    for (int i = 0; i < (int) users.size(); i++){
+        if (users[i].id == idOfLoggedUser){
+            users[i].password = password;
+            exportRegisteredUsersToExternalFile(users);
+            cout << "Haslo zostalo zmienione" << endl;
+            Sleep(2000);
+            break;
+        }
+    }
+}
+
+void displayMenu(vector<Addressee>& addressees, vector<User>& users, int& idOfLoggedUser){
+    int choice;
+    string choiceFromReadLine;
+    int theBiggestId;
+
+    theBiggestId = loadAddressBookToAddressees(addressees, idOfLoggedUser);
 
     do{
-        displayMenu();
-        cin >> choice;
+        system("cls");
+
+        if (theBiggestId == 0){
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+            cout << "Ksiazka adresowa jest pusta, wprowadz dane!" << endl << endl;
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+        }
+
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+        cout << "KSIAZKA ADRESOWA" << endl;
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+
+        cout << "1. Dodaj adresata." << endl;
+        cout << "2. Wyszukaj adresata po imieniu." << endl;
+        cout << "3. Wyszukaj adresata po nazwisku." << endl;
+        cout << "4. Wyswietl wszystkich adresatow." << endl;
+        cout << "5. Usun adresata." << endl;
+        cout << "6. Edytuj adresata." << endl;
+        cout << "7. Zmien haslo." << endl;
+        cout << "8. Wyloguj." << endl;
+
+        do{
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10);
+            cout << "Wybierz opcje (1-8): ";
+            choiceFromReadLine = readLine();
+        }while (!isNumber(choiceFromReadLine));
+
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+        choice = stoi(choiceFromReadLine);
 
         switch (choice){
         case 1:
-            addFriend(addressees);
+            theBiggestId = addFriend(addressees, idOfLoggedUser, theBiggestId);
             break;
         case 2:
             displayByName(addressees);
@@ -404,8 +484,145 @@ int main(){
             break;
         case 6:
             editAddressee(addressees);
+            break;
+        case 7:
+            changePassword(users, idOfLoggedUser);
+            break;
+        default:
+            idOfLoggedUser = 0;
         }
-    } while (choice > 0 && choice < 7);
+    }while (choice >= 1 && choice < 8);
+}
+
+void registration (vector<User>& users){
+    User newUser;
+    string login, password;
+    cout << "Podaj nazwe uzytkownika: ";
+    cin >> login;
+
+    for (int i = 0; i < (int) users.size(); i++){
+        if (users[i].login == login){
+            cout << "Taki uzytkownik istnieje. Wpisz inna nazwe uzytkownika: ";
+            cin >> login;
+            i = -1;
+        }
+    }
+
+    cout << "Podaj haslo: ";
+    cin >> password;
+    newUser.login = login;
+    newUser.password = password;
+    newUser.id = (users.size() == 0) ? 1 : users.back().id + 1;
+    users.push_back(newUser);
+
+    fstream registeredUsers;
+    registeredUsers.open("Registered users.txt", ios::out | ios::app);
+
+    registeredUsers << users[users.size() - 1].id << "|" << users[users.size() - 1].login << "|"
+    << users[users.size() - 1].password << "|" << endl;
+
+    cout << "Konto zalozone." << endl;
+    Sleep(2000);
+}
+
+int loggingIn (vector<User> users){
+    string login, password;
+
+    cout << "Podaj login: ";
+    cin >> login;
+
+    for (int i = 0; i < (int) users.size(); i++){
+        if (users[i].login == login){
+            for (int j = 0; j < 3; j++){
+                cout << "Podaj haslo. Pozostalo prob (" << 3 - j << "): ";
+                cin >> password;
+                if (password == users[i].password)
+                {
+                    cout << "Zalogowales sie." << endl;
+                    Sleep(2000);
+                    return users[i].id;
+                }
+            }
+            cout << "Podales 3 razy bledne haslo. Poczekaj 3 sekundy przed kolejna proba." << endl;
+            Sleep(3000);
+
+            return 0;
+        }
+    }
+    cout << "Nie ma uzytkownika z takim loginem." << endl;
+    Sleep(2000);
+
+    return 0;
+}
+
+void loadRegisteredUsersToUsers(vector<User>& users){
+    int counter = 0;
+    fstream registeredUsers;
+    registeredUsers.open( "Registered users.txt", ios::in);
+
+    if (!registeredUsers.good()){
+        return;
+    }
+    else{
+        User user;
+        string line;
+        cin.sync();
+
+        while (getline(registeredUsers, line)){
+            user.id = stoi(getSubstringAndIncreaseCounter(line, counter));
+            user.login = getSubstringAndIncreaseCounter(line, counter);
+            user.password = getSubstringAndIncreaseCounter(line, counter);
+
+            users.push_back(user);
+            counter = 0;
+            cin.sync();
+        }
+    }
+}
+
+int main(){
+    vector <Addressee> addressees;
+    vector <User> users;
+    int idOfLoggedUser = 0;
+    int choice;
+    string choiceFromReadLine;
+
+    loadRegisteredUsersToUsers(users);
+
+    while (1){
+        if (idOfLoggedUser == 0){
+            system("cls");
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+            cout << "KSIAZKA ADRESOWA" << endl;
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+            cout << "1. Rejestracja." << endl;
+            cout << "2. Logowanie." << endl;
+            cout << "3. Zakoncz program." << endl;
+
+            do{
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10);
+                cout << "Wybierz opcje (1-3): ";
+                choiceFromReadLine = readLine();
+            }while (!isNumber(choiceFromReadLine));
+
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+            choice = stoi(choiceFromReadLine);
+
+            switch(choice){
+            case 1:
+                registration(users);
+                break;
+            case 2:
+                idOfLoggedUser = loggingIn(users);
+                break;
+            default:
+                exit(0);
+            }
+        }
+        else{
+            displayMenu(addressees, users, idOfLoggedUser);
+        }
+    }
 
     return 0;
 }
