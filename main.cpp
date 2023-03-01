@@ -74,7 +74,7 @@ int loadAddressBookToAddressees(vector<Addressee>& addressees, int idOfLoggedUse
             theBiggestId = myFriend.id;
 
             if (myFriend.idOfLoggedUser == idOfLoggedUser){
-                    addressees.push_back(myFriend);
+                addressees.push_back(myFriend);
             }
             counter = 0;
             cin.sync();
@@ -101,7 +101,7 @@ int addFriend(vector<Addressee>& addressees, int idOfLoggedUser, int theBiggestI
     cout << "Podaj adres: ";
     newFriend.address = readLine();
 
-    newFriend.id = (theBiggestId == 0) ? 1 : theBiggestId + 1;
+    newFriend.id = theBiggestId == 0 ? 1 : theBiggestId + 1;
     newFriend.idOfLoggedUser = idOfLoggedUser;
 
     addressees.push_back(newFriend);
@@ -117,7 +117,7 @@ int addFriend(vector<Addressee>& addressees, int idOfLoggedUser, int theBiggestI
     cout << "Kontakt zostal dodany." << endl;
     Sleep(3000);
     system("cls");
-    return theBiggestId++;
+    return ++theBiggestId;
 }
 
 void displayByName(vector<Addressee> addressees){
@@ -233,7 +233,7 @@ void exportAfterDeletion(int id){
     rename("KsiazkaAdresowa_temporary.txt", "KsiazkaAdresowa.txt");
 }
 
-void exportAfterEdition(vector<Addressee> addressees, int id, int counterInAddressees){
+void exportAfterEdition(string editedAddressee, int id){
     int counter = 0;
     string line;
     int idToCompare;
@@ -248,10 +248,7 @@ void exportAfterEdition(vector<Addressee> addressees, int id, int counterInAddre
             addressBookTemporary << line << endl;
         }
         else{
-            addressBookTemporary << addressees[counterInAddressees].id << "|" << addressees[counterInAddressees].idOfLoggedUser << "|"
-            << addressees[counterInAddressees].name << "|" << addressees[counterInAddressees].surname << "|"
-            << addressees[counterInAddressees].phoneNumber << "|" << addressees[counterInAddressees].email << "|"
-            << addressees[counterInAddressees].address << "|" << endl;
+            addressBookTemporary << editedAddressee << endl;
         }
         counter = 0;
     }
@@ -261,7 +258,38 @@ void exportAfterEdition(vector<Addressee> addressees, int id, int counterInAddre
     rename("KsiazkaAdresowa_temporary.txt", "KsiazkaAdresowa.txt");
 }
 
-void deleteAddressee(vector<Addressee>& addressees){
+int getTheBiggestIdAfterDeletion(){
+    int counter = 0;
+    int theBiggestId = 0;
+    fstream addressBook;
+    addressBook.open( "KsiazkaAdresowa.txt", ios::in);
+
+    if (!addressBook.good()){
+        return 0;
+    }
+    else{
+        Addressee myFriend;
+        string line;
+        cin.sync();
+
+        while (getline(addressBook, line)){
+            myFriend.id = stoi(getSubstringAndIncreaseCounter(line, counter));
+            myFriend.idOfLoggedUser = stoi(getSubstringAndIncreaseCounter(line, counter));
+            myFriend.name = getSubstringAndIncreaseCounter(line, counter);
+            myFriend.surname = getSubstringAndIncreaseCounter(line, counter);
+            myFriend.phoneNumber = getSubstringAndIncreaseCounter(line, counter);
+            myFriend.email = getSubstringAndIncreaseCounter(line, counter);
+            myFriend.address = getSubstringAndIncreaseCounter(line, counter);
+
+            theBiggestId = myFriend.id;
+
+            counter = 0;
+        }
+        return theBiggestId;
+    }
+}
+
+int deleteAddressee(vector<Addressee>& addressees, int theBiggestId){
     string idFromReadLine;
     int id;
     char confirmation;
@@ -301,6 +329,9 @@ void deleteAddressee(vector<Addressee>& addressees){
                 addressees.erase(it);
                 exportAfterDeletion(id);
                 cout << "Adresat zostal usuniety." << endl;
+                if(id == theBiggestId){
+                    theBiggestId = getTheBiggestIdAfterDeletion();
+                }
             }
             else{
                 cout << "Adresat nie zostal usuniety." << endl;
@@ -309,6 +340,7 @@ void deleteAddressee(vector<Addressee>& addressees){
     }
     system("pause");
     system("cls");
+    return theBiggestId;
 }
 
 void editAddressee(vector<Addressee>& addressees){
@@ -317,6 +349,7 @@ void editAddressee(vector<Addressee>& addressees){
     string choiceFromReadLine;
     int choice;
     int counterInAddressees = -1;
+    string editedAddressee;
 
     if ((int) addressees.size() == 0){
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
@@ -396,7 +429,13 @@ void editAddressee(vector<Addressee>& addressees){
                 }while (!isNumber(choiceFromReadLine));
                 choice = stoi(choiceFromReadLine);
             }
-            exportAfterEdition(addressees, id, counterInAddressees);
+
+            editedAddressee = to_string(addressees[counterInAddressees].id) + "|" + to_string(addressees[counterInAddressees].idOfLoggedUser) +
+            "|" + addressees[counterInAddressees].name + "|" + addressees[counterInAddressees].surname +
+            "|" + addressees[counterInAddressees].phoneNumber + "|" + addressees[counterInAddressees].email +
+            "|" + addressees[counterInAddressees].address + "|";
+
+            exportAfterEdition(editedAddressee, id);
             system("cls");
         }
     }
@@ -428,7 +467,8 @@ void changePassword(vector<User>& users, int idOfLoggedUser){
     }
 }
 
-void displayMenu(vector<Addressee>& addressees, vector<User>& users, int& idOfLoggedUser){
+void displayMenu(vector<User>& users, int& idOfLoggedUser){
+    vector <Addressee> addressees;
     int choice;
     string choiceFromReadLine;
     int theBiggestId;
@@ -437,7 +477,6 @@ void displayMenu(vector<Addressee>& addressees, vector<User>& users, int& idOfLo
 
     do{
         system("cls");
-
         if (theBiggestId == 0){
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
             cout << "Ksiazka adresowa jest pusta, wprowadz dane!" << endl << endl;
@@ -480,7 +519,7 @@ void displayMenu(vector<Addressee>& addressees, vector<User>& users, int& idOfLo
             displayAddressBook(addressees);
             break;
         case 5:
-            deleteAddressee(addressees);
+            theBiggestId = deleteAddressee(addressees, theBiggestId);
             break;
         case 6:
             editAddressee(addressees);
@@ -581,7 +620,6 @@ void loadRegisteredUsersToUsers(vector<User>& users){
 }
 
 int main(){
-    vector <Addressee> addressees;
     vector <User> users;
     int idOfLoggedUser = 0;
     int choice;
@@ -620,7 +658,7 @@ int main(){
             }
         }
         else{
-            displayMenu(addressees, users, idOfLoggedUser);
+            displayMenu(users, idOfLoggedUser);
         }
     }
 
