@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>10</x>
+      <y>460</y>
+      <w>290</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>AddresseeManager
+--
+- addresses : vector&lt;Addressee&gt;
+- addresseeFile : AddresseeFile
+--
++ loadAddressBookToAddressees() : integer
++ addFriend() : integer
++ displayAddressBook() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>320</x>
+      <y>190</y>
+      <w>200</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>AddresseeFile
+--
+- addresseesFileName : string
+--
++ AddresseeFile()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>10</x>
+      <y>10</y>
+      <w>280</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>AddressBook
+--
+- userManager : UserManager
+- choiceFromReadLine : string
+- choice : integer
+- addresseeManager : AddresseeManager
+--
++ AddressBook()
++ loadRegisteredUsersToUsers() : void
++ displayRegLogMenu() : void
++ registration() : void
++ loggingIn() : integer
++ loadAddressBookToAddressees() : integer
++ displayMenu() : void
++ changePassword() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>10</x>
+      <y>260</y>
+      <w>300</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>UserManager
+--
+- idOfLoggedUser : integer
+- users : vector&lt;User&gt;
+- userFile : UserFile
+--
++ UserManager()
++ loadRegisteredUsersToUsers() : void
++ registration() : void
++ loggingIn() : integer
++ exportRegisteredUsersToExternalFile() : void
++ changePassword() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>10</y>
+      <w>220</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>UserFile
+--
+- registeredUsersFileName : string
+--
++ UserFile()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>90</y>
+      <w>130</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>User
+--
+- id : integer
+- login : string
+- password : string</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>320</x>
+      <y>270</y>
+      <w>180</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Addressee
+--
+- id : integer
+- idOfLoggedUser : integer
+- name : string
+- surname : string
+- phoneNumber : string
+- email : string
+- address : string</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>10</x>
+      <y>600</y>
+      <w>290</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>AuxiliaryFunctions
+--
+--
++ readLine() : string
++ isNumber() : bool
++ getSubstringAndIncreaseCounter() : string</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
