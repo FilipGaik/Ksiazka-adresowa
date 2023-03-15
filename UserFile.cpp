@@ -4,7 +4,7 @@ vector<User> UserFile::loadRegisteredUsersToUsers(){
     int counter = 0;
     vector<User> users;
     fstream registeredUsers;
-    registeredUsers.open(registeredUsersFileName, ios::in);
+    registeredUsers.open(REGISTERED_USERS_FILENAME, ios::in);
     User user;
     string line;
     cin.sync();
@@ -22,5 +22,5 @@ vector<User> UserFile::loadRegisteredUsersToUsers(){
 }
 
 string UserFile::getRegisteredUsersFileName(){
-    return registeredUsersFileName;
+    return REGISTERED_USERS_FILENAME;
 }

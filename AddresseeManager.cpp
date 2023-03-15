@@ -1,43 +1,6 @@
 #include "AddresseeManager.h"
 
-int AddresseeManager::loadAddressBookToAddressees(int idOfLoggedUser){
-    int counter = 0;
-    int theBiggestId = 0;
-    fstream addressBook;
-    addressBook.open(addresseeFile.getAddresseesFileName(), ios::in);
-
-    addressees.clear();
-
-    if (!addressBook.good()){
-        return 0;
-    }
-    else{
-        Addressee myFriend;
-        string line;
-        cin.sync();
-
-        while (getline(addressBook, line)){
-            myFriend.setId(stoi(AuxiliaryFunctions::getSubstringAndIncreaseCounter(line, counter)));
-            myFriend.setIdOfLoggedUser(stoi(AuxiliaryFunctions::getSubstringAndIncreaseCounter(line, counter)));
-            myFriend.setName(AuxiliaryFunctions::getSubstringAndIncreaseCounter(line, counter));
-            myFriend.setSurname(AuxiliaryFunctions::getSubstringAndIncreaseCounter(line, counter));
-            myFriend.setPhoneNumber(AuxiliaryFunctions::getSubstringAndIncreaseCounter(line, counter));
-            myFriend.setEmail(AuxiliaryFunctions::getSubstringAndIncreaseCounter(line, counter));
-            myFriend.setAddress(AuxiliaryFunctions::getSubstringAndIncreaseCounter(line, counter));
-
-            theBiggestId = myFriend.getId();
-
-            if (myFriend.getIdOfLoggedUser() == idOfLoggedUser){
-                addressees.push_back(myFriend);
-            }
-            counter = 0;
-            cin.sync();
-        }
-        return theBiggestId;
-    }
-}
-
-int AddresseeManager::addFriend(int idOfLoggedUser, int theBiggestId){
+void AddresseeManager::addFriend(){
     Addressee newFriend;
 
     cout << "Podaj imie: ";
@@ -55,8 +18,8 @@ int AddresseeManager::addFriend(int idOfLoggedUser, int theBiggestId){
     cout << "Podaj adres: ";
     newFriend.setAddress(AuxiliaryFunctions::readLine());
 
-    newFriend.setId(theBiggestId == 0 ? 1 : theBiggestId + 1);
-    newFriend.setIdOfLoggedUser(idOfLoggedUser);
+    newFriend.setId(getTheBiggestId() + 1);
+    newFriend.setIdOfLoggedUser(ID_OF_LOGGED_USER);
 
     addressees.push_back(newFriend);
 
@@ -69,10 +32,10 @@ int AddresseeManager::addFriend(int idOfLoggedUser, int theBiggestId){
     << addressees[addressees.size() - 1].getAddress() << "|" << endl;
 
     cout << "Kontakt zostal dodany." << endl;
-    Sleep(3000);
+    system("pause");
     system("cls");
 
-    return ++theBiggestId;
+    addresseeFile.setTheBiggestId(getTheBiggestId() + 1);
 }
 
 void AddresseeManager::displayAddressBook(){
@@ -94,4 +57,8 @@ void AddresseeManager::displayAddressBook(){
     cout << endl;
     system("pause");
     system("cls");
+}
+
+int AddresseeManager::getTheBiggestId(){
+    return addresseeFile.getTheBiggestId();
 }

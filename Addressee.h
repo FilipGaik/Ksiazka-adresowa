@@ -15,6 +15,15 @@ class Addressee{
     string address;
 
 public:
+    Addressee(int id = 0, int idOfLoggedUser = 0, string name = "", string surname = "", string phoneNumber = "", string email = "", string address = ""){
+        this -> id = id;
+        this -> idOfLoggedUser = idOfLoggedUser;
+        this -> name = name;
+        this -> surname = surname;
+        this -> phoneNumber = phoneNumber;
+        this -> email = email;
+        this -> address = address;
+    }
     void setId(int newId);
     void setIdOfLoggedUser(int newIdOfLoggedUser);
     void setName(string newName);

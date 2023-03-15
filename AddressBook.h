@@ -9,25 +9,30 @@
 using namespace std;
 
 class AddressBook{
-private:
     UserManager userManager;
-    string choiceFromReadLine;
-    int choice;
-    AddresseeManager addresseeManager;
+    AddresseeManager* addresseeManager;
+    const string ADDRESSEES_FILENAME;
 
 public:
-    AddressBook(string registeredUsersFileName) : userManager(registeredUsersFileName) {};
-    void loadRegisteredUsersToUsers();
-    void setChoiceFromReadLine();
+    AddressBook(string registeredUsersFileName, string addresseesFileName)
+        : userManager(registeredUsersFileName), ADDRESSEES_FILENAME(addresseesFileName)
+    {
+        addresseeManager = NULL;
+    };
+    ~AddressBook()
+    {
+        delete addresseeManager;
+        addresseeManager = NULL;
+    };
     int getIdOfLoggedUser();
     void setIdOfLoggedUser(int newId);
-    void displayRegLogMenu();
     void registration();
-    int loggingIn ();
-    int loadAddressBookToAddressees(int idOfLoggedUser);
-    void displayMenu();
+    void loggingIn ();
     void changePassword();
-
+    void addFriend();
+    void displayAddressBook();
+    void logout();
+    int getTheBiggestId();
 };
 
 #endif

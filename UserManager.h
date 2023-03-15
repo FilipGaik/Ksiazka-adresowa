@@ -12,7 +12,6 @@
 using namespace std;
 
 class UserManager{
-private:
     int idOfLoggedUser;
     vector <User> users;
     UserFile userFile;
@@ -20,12 +19,12 @@ private:
 public:
     UserManager(string registeredUsersFileName) : userFile(registeredUsersFileName){
         idOfLoggedUser = 0;
+        users = userFile.loadRegisteredUsersToUsers();
     };
-    void loadRegisteredUsersToUsers();
     int getIdOfLoggedUser();
     void setIdOfLoggedUser(int newId);
     void registration();
-    int loggingIn ();
+    void loggingIn ();
     void exportRegisteredUsersToExternalFile();
     void changePassword();
 };

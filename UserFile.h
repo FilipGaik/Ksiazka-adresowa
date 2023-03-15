@@ -11,11 +11,10 @@
 using namespace std;
 
 class UserFile{
-private:
-    const string registeredUsersFileName;
+    const string REGISTERED_USERS_FILENAME;
 
 public:
-    UserFile(string regUsFiNa) : registeredUsersFileName(regUsFiNa) {};
+    UserFile(string registeredUsersFileName) : REGISTERED_USERS_FILENAME(registeredUsersFileName) {};
     vector<User> loadRegisteredUsersToUsers();
     string getRegisteredUsersFileName();
 };

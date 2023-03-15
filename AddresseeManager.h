@@ -13,14 +13,19 @@
 using namespace std;
 
 class AddresseeManager{
-private:
     vector <Addressee> addressees;
     AddresseeFile addresseeFile;
+    const int ID_OF_LOGGED_USER;
 
 public:
-    int loadAddressBookToAddressees(int idOfLoggedUser);
-    int addFriend(int idOfLoggedUser, int theBiggestId);
+    AddresseeManager(string addresseesFileName, int idOfLoggedUser)
+        : addresseeFile(addresseesFileName), ID_OF_LOGGED_USER(idOfLoggedUser)
+    {
+        addressees = addresseeFile.loadAddressBookToAddressees(ID_OF_LOGGED_USER);
+    };
+    void addFriend();
     void displayAddressBook();
+    int getTheBiggestId();
 };
 
 #endif

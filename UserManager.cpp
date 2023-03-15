@@ -1,9 +1,5 @@
 #include "UserManager.h"
 
-void UserManager::loadRegisteredUsersToUsers(){
-    users = userFile.loadRegisteredUsersToUsers();
-}
-
 int UserManager::getIdOfLoggedUser(){
     return idOfLoggedUser;
 }
@@ -42,37 +38,41 @@ void UserManager::registration(){
     << users[users.size() - 1].getPassword() << "|" << endl;
 
     cout << "Konto zalozone." << endl;
-    Sleep(2000);
+    system("pause");
 }
 
-int UserManager::loggingIn (){
+void UserManager::loggingIn (){
     string login, password;
+    bool thereIsAUser = false;
 
     cout << "Podaj login: ";
     cin >> login;
 
     for (int i = 0; i < (int) users.size(); i++){
         if (users[i].getLogin() == login){
+            thereIsAUser = true;
             for (int j = 0; j < 3; j++){
                 cout << "Podaj haslo. Pozostalo prob (" << 3 - j << "): ";
                 cin >> password;
                 if (password == users[i].getPassword())
                 {
                     cout << "Zalogowales sie." << endl;
-                    Sleep(2000);
-                    return users[i].getId();
+                    system("pause");
+                    idOfLoggedUser = users[i].getId();
+                    return;
                 }
             }
-            cout << "Podales 3 razy bledne haslo. Poczekaj 3 sekundy przed kolejna proba." << endl;
-            Sleep(3000);
-
-            return 0;
+            if (idOfLoggedUser == 0){
+                cout << "Podales 3 razy bledne haslo." << endl;
+                system("pause");
+                return;
+            }
         }
     }
-    cout << "Nie ma uzytkownika z takim loginem." << endl;
-    Sleep(2000);
-
-    return 0;
+    if (!thereIsAUser){
+        cout << "Nie ma uzytkownika z takim loginem." << endl;
+        system("pause");
+    }
 }
 
 void UserManager::exportRegisteredUsersToExternalFile(){
@@ -95,7 +95,7 @@ void UserManager::changePassword(){
             users[i].setPassword(password);
             exportRegisteredUsersToExternalFile();
             cout << "Haslo zostalo zmienione" << endl;
-            Sleep(2000);
+            system("pause");
             break;
         }
     }
