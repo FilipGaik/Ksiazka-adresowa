@@ -75,19 +75,19 @@ int main(){
                     addressBook.addFriend();
                     break;
                 case 2:
-                    cout << "Opcja jeszcze niedostepna." << endl; system("pause"); system("cls"); //displayByName();
+                    addressBook.displayByName();
                     break;
                 case 3:
-                    cout << "Opcja jeszcze niedostepna." << endl; system("pause"); system("cls"); //displayBySurname();
+                    addressBook.displayBySurname();
                     break;
                 case 4:
                     addressBook.displayAddressBook();
                     break;
                 case 5:
-                    cout << "Opcja jeszcze niedostepna." << endl; system("pause"); system("cls"); //theBiggestId = deleteAddressee(theBiggestId);
+                    addressBook.deleteAddressee();
                     break;
                 case 6:
-                    cout << "Opcja jeszcze niedostepna." << endl; system("pause"); system("cls"); //editAddressee();
+                    addressBook.editAddressee();
                     break;
                 case 7:
                     addressBook.changePassword();

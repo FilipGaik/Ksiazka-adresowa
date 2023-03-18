@@ -5,16 +5,16 @@
 #include <vector>
 #include <fstream>
 
+#include "TextFile.h"
 #include "User.h"
 #include "AuxiliaryFunctions.h"
 
 using namespace std;
 
-class UserFile{
-    const string REGISTERED_USERS_FILENAME;
-
+class UserFile : public TextFile{
 public:
-    UserFile(string registeredUsersFileName) : REGISTERED_USERS_FILENAME(registeredUsersFileName) {};
+    UserFile(string registeredUsersFileName)
+    : TextFile(registeredUsersFileName) {};
     vector<User> loadRegisteredUsersToUsers();
     string getRegisteredUsersFileName();
 };

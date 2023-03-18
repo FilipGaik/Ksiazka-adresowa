@@ -33,6 +33,10 @@ public:
     void displayAddressBook();
     void logout();
     int getTheBiggestId();
+    void deleteAddressee();
+    void editAddressee();
+    void displayByName();
+    void displayBySurname();
 };
 
 #endif

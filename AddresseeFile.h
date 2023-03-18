@@ -5,17 +5,18 @@
 #include <vector>
 #include <fstream>
 
+#include "TextFile.h"
 #include "Addressee.h"
 #include "AuxiliaryFunctions.h"
 
 using namespace std;
 
-class AddresseeFile{
-    const string ADDRESSEES_FILENAME;
+class AddresseeFile : public TextFile{
     int theBiggestId;
 
 public:
-    AddresseeFile(string addresseesFileName) : ADDRESSEES_FILENAME(addresseesFileName){
+    AddresseeFile(string addresseesFileName)
+    : TextFile(addresseesFileName){
         theBiggestId = 0;
     };
     string getAddresseesFileName();

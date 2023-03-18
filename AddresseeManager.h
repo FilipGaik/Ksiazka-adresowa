@@ -16,6 +16,9 @@ class AddresseeManager{
     vector <Addressee> addressees;
     AddresseeFile addresseeFile;
     const int ID_OF_LOGGED_USER;
+    void exportAfterDeletion(int id);
+    void setTheBiggestIdAfterDeletion();
+    void exportAfterEdition(string editedAddressee, int id);
 
 public:
     AddresseeManager(string addresseesFileName, int idOfLoggedUser)
@@ -26,6 +29,10 @@ public:
     void addFriend();
     void displayAddressBook();
     int getTheBiggestId();
+    void deleteAddressee();
+    void editAddressee();
+    void displayByName();
+    void displayBySurname();
 };
 
 #endif

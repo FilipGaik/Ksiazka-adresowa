@@ -40,3 +40,19 @@ void AddressBook::logout(){
 int AddressBook::getTheBiggestId(){
     return addresseeManager -> getTheBiggestId();
 }
+
+void AddressBook::deleteAddressee(){
+    addresseeManager -> deleteAddressee();
+}
+
+void AddressBook::editAddressee(){
+    addresseeManager -> editAddressee();
+}
+
+void AddressBook::displayByName(){
+    addresseeManager -> displayByName();
+}
+
+void AddressBook::displayBySurname(){
+    addresseeManager -> displayBySurname();
+}

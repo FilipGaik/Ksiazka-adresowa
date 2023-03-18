@@ -1,7 +1,7 @@
 #include "AddresseeFile.h"
 
 string AddresseeFile::getAddresseesFileName(){
-    return ADDRESSEES_FILENAME;
+    return FILENAME;
 }
 
 vector<Addressee> AddresseeFile::loadAddressBookToAddressees(int idOfLoggedUser){
