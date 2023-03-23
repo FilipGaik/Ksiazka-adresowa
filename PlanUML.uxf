@@ -4,66 +4,85 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>10</x>
-      <y>460</y>
+      <x>120</x>
+      <y>340</y>
       <w>290</w>
-      <h>130</h>
+      <h>260</h>
     </coordinates>
     <panel_attributes>AddresseeManager
 --
 - addresses : vector&lt;Addressee&gt;
 - addresseeFile : AddresseeFile
+- ID_OF_LOGGED_USER : integer
+- exportAfterDeletion() : void
+- setTheBiggestIdAfterDeletion() : void
+- exportAfterEdition() : void
 --
-+ loadAddressBookToAddressees() : integer
-+ addFriend() : integer
-+ displayAddressBook() : void</panel_attributes>
++ AddresseeManager()
++ addFriend() : void
++ displayAddressBook() : void
++ getTheBiggestId() : integer
++ deleteAddressee() : void
++ editAddressee() : void
++ displayByName() : void
++ displayBySurname() : void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>320</x>
-      <y>190</y>
-      <w>200</w>
-      <h>70</h>
+      <x>280</x>
+      <y>120</y>
+      <w>370</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>AddresseeFile
 --
-- addresseesFileName : string
+- theBiggestId : integer
 --
-+ AddresseeFile()</panel_attributes>
++ AddresseeFile()
++ getAddresseesFileName() : string
++ loadAddressBookToAddressees() : vector&lt;Addressee&gt;
++ getTheBiggestId() : integer
++ setTheBiggestId() : void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>10</x>
-      <y>10</y>
+      <x>410</x>
+      <y>770</y>
       <w>280</w>
-      <h>240</h>
+      <h>320</h>
     </coordinates>
     <panel_attributes>AddressBook
 --
 - userManager : UserManager
-- choiceFromReadLine : string
-- choice : integer
-- addresseeManager : AddresseeManager
+- addresseeManager : AddresseeManager*
+- ADDRESSES_FILENAME : string
 --
 + AddressBook()
-+ loadRegisteredUsersToUsers() : void
-+ displayRegLogMenu() : void
++ ~AddressBook()
++ getIdOfLoggedUser() : integer
++ setIdOfLoggedUser() : void
 + registration() : void
 + loggingIn() : integer
-+ loadAddressBookToAddressees() : integer
-+ displayMenu() : void
-+ changePassword() : void</panel_attributes>
++ changePassword() : void
++ addFriend() : void
++ displayAddressBook() : void
++ logout() : void
++ getTheBiggestId() : integer
++ deleteAddressee() : void
++ editAddressee() : void
++ displayByName() : void
++ displayBySurname() : void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>10</x>
-      <y>260</y>
+      <x>680</x>
+      <y>490</y>
       <w>300</w>
       <h>190</h>
     </coordinates>
@@ -74,9 +93,10 @@
 - userFile : UserFile
 --
 + UserManager()
-+ loadRegisteredUsersToUsers() : void
++ getIdOfLoggedUser() : integer
++ setIdOfLoggedUser() : void
 + registration() : void
-+ loggingIn() : integer
++ loggingIn() : void
 + exportRegisteredUsersToExternalFile() : void
 + changePassword() : void</panel_attributes>
     <additional_attributes/>
@@ -84,23 +104,24 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>300</x>
-      <y>10</y>
-      <w>220</w>
-      <h>70</h>
+      <x>670</x>
+      <y>120</y>
+      <w>320</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>UserFile
 --
-- registeredUsersFileName : string
 --
-+ UserFile()</panel_attributes>
++ UserFile()
++ loadRegisteredUsersToUsers() : vector&lt;User&gt;
++ getRegisteredUsersFileName() : string</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>300</x>
-      <y>90</y>
+      <x>860</x>
+      <y>250</y>
       <w>130</w>
       <h>90</h>
     </coordinates>
@@ -114,10 +135,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>320</x>
-      <y>270</y>
+      <x>10</x>
+      <y>120</y>
       <w>180</w>
-      <h>140</h>
+      <h>160</h>
     </coordinates>
     <panel_attributes>Addressee
 --
@@ -127,14 +148,16 @@
 - surname : string
 - phoneNumber : string
 - email : string
-- address : string</panel_attributes>
+- address : string
+--
++ Addressee()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>10</x>
-      <y>600</y>
+      <x>500</x>
+      <y>340</y>
       <w>290</w>
       <h>90</h>
     </coordinates>
@@ -145,5 +168,163 @@
 + isNumber() : bool
 + getSubstringAndIncreaseCounter() : string</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>590</x>
+      <y>0</y>
+      <w>140</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>TextFile
+--
+- FILENAME : string
+--
++ TextFile()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>460</x>
+      <y>60</y>
+      <w>180</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>160.0;10.0;160.0;40.0;10.0;40.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>60</y>
+      <w>180</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0;160.0;40.0;160.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>90</x>
+      <y>270</y>
+      <w>130</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>110.0;70.0;110.0;30.0;10.0;30.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>240</y>
+      <w>150</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;60.0;130.0;60.0;130.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>400</x>
+      <y>340</y>
+      <w>120</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>530</x>
+      <y>240</y>
+      <w>30</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>120</y>
+      <w>120</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>920</x>
+      <y>200</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>820</x>
+      <y>200</y>
+      <w>30</w>
+      <h>310</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;290.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>920</x>
+      <y>330</y>
+      <w>30</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;160.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>620</x>
+      <y>670</y>
+      <w>240</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;50.0;220.0;50.0;220.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>240</x>
+      <y>590</y>
+      <w>270</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>250.0;180.0;250.0;130.0;10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>720</x>
+      <y>200</y>
+      <w>30</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>
